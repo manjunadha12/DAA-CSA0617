@@ -1,0 +1,58 @@
+def floyd_algorithm(n, dist):
+    # Floyd-Warshall Algorithm to find shortest paths between all pairs of nodes
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                if dist[i][j] > dist[i][k] + dist[k][j]:
+                    dist[i][j] = dist[i][k] + dist[k][j]
+
+def display_matrix(dist):
+    print("Distance Matrix:")
+    for row in dist:
+        print(row)
+
+def main():
+    # Number of Routers
+    n = 6
+    # Distance Matrix initialization
+    inf = float('inf')
+    dist = [
+        [0, 2, 4, inf, 7, inf],  # Router A
+        [2, 0, 1, 3, inf, inf],  # Router B
+        [4, 1, 0, 1, 2, inf],    # Router C
+        [inf, 3, 1, 0, 4, 3],    # Router D
+        [7, inf, 2, 4, 0, 1],    # Router E
+        [inf, inf, inf, 3, 1, 0] # Router F
+    ]
+    
+    # Display the initial distance matrix
+    print("Initial Distance Matrix:")
+    display_matrix(dist)
+    
+    # Apply Floyd's Algorithm to compute shortest paths between all routers
+    floyd_algorithm(n, dist)
+    
+    # Display the distance matrix after applying Floyd's Algorithm
+    print("\nDistance Matrix after applying Floyd's Algorithm:")
+    display_matrix(dist)
+    
+    # Shortest path from Router A to Router F (Index 0 to Index 5)
+    print("\nShortest path from Router A to Router F:", dist[0][5])
+    
+    # Simulate the failure of the link between Router B and Router D
+    # Set the distance between B and D to inf (link failure)
+    dist[1][3] = inf
+    dist[3][1] = inf
+    
+    # Apply Floyd's Algorithm again after the link failure
+    floyd_algorithm(n, dist)
+    
+    # Display the distance matrix after the link failure and re-running Floyd's Algorithm
+    print("\nDistance Matrix after simulating the link failure (B-D):")
+    display_matrix(dist)
+    
+    # Shortest path from Router A to Router F (Index 0 to Index 5) after link failure
+    print("\nShortest path from Router A to Router F after link failure:", dist[0][5])
+
+# Run the program
+main()
