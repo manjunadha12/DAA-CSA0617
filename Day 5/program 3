@@ -1,0 +1,46 @@
+# Function to implement Merge Sort
+def merge_sort(arr):
+    if len(arr) > 1:
+        mid = len(arr) // 2  # Find the middle of the array
+        L = arr[:mid]        # Divide the array elements into 2 halves
+        R = arr[mid:]
+
+        merge_sort(L)  # Sort the first half
+        merge_sort(R)  # Sort the second half
+
+        i = j = k = 0
+
+        # Merging the two halves
+        while i < len(L) and j < len(R):
+            if L[i] < R[j]:
+                arr[k] = L[i]
+                i += 1
+            else:
+                arr[k] = R[j]
+                j += 1
+            k += 1
+
+        # Checking if any element was left in L[]
+        while i < len(L):
+            arr[k] = L[i]
+            i += 1
+            k += 1
+
+        # Checking if any element was left in R[]
+        while j < len(R):
+            arr[k] = R[j]
+            j += 1
+            k += 1
+    return arr
+
+# Test case 1
+arr1 = [31, 23, 35, 27, 11, 21, 15, 28]
+sorted_arr1 = merge_sort(arr1)
+print(f"Input: {arr1}")
+print(f"Sorted Output: {sorted_arr1}")
+
+# Test case 2
+arr2 = [22, 34, 25, 36, 43, 67, 52, 13, 65, 17]
+sorted_arr2 = merge_sort(arr2)
+print(f"\nInput: {arr2}")
+print(f"Sorted Output: {sorted_arr2}")
