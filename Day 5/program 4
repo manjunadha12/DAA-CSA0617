@@ -1,0 +1,57 @@
+# Function to implement Merge Sort and count comparisons
+def merge_sort_with_comparisons(arr):
+    comparisons = 0  # Initialize the comparison counter
+    
+    def merge_sort(arr):
+        nonlocal comparisons
+        
+        if len(arr) > 1:
+            mid = len(arr) // 2  # Find the middle of the array
+            L = arr[:mid]        # Divide the array elements into 2 halves
+            R = arr[mid:]
+
+            merge_sort(L)  # Sort the first half
+            merge_sort(R)  # Sort the second half
+
+            i = j = k = 0
+
+            # Merging the two halves
+            while i < len(L) and j < len(R):
+                comparisons += 1  # Increment the comparison count
+                if L[i] < R[j]:
+                    arr[k] = L[i]
+                    i += 1
+                else:
+                    arr[k] = R[j]
+                    j += 1
+                k += 1
+
+            # Check if any element was left in L[]
+            while i < len(L):
+                arr[k] = L[i]
+                i += 1
+                k += 1
+
+            # Check if any element was left in R[]
+            while j < len(R):
+                arr[k] = R[j]
+                j += 1
+                k += 1
+        return arr
+
+    sorted_arr = merge_sort(arr)
+    return sorted_arr, comparisons
+
+# Test case 1
+arr1 = [12, 4, 78, 23, 45, 67, 89, 1]
+sorted_arr1, comparisons1 = merge_sort_with_comparisons(arr1)
+print(f"Input: {arr1}")
+print(f"Sorted Output: {sorted_arr1}")
+print(f"Number of Comparisons: {comparisons1}")
+
+# Test case 2
+arr2 = [38, 27, 43, 3, 9, 82, 10]
+sorted_arr2, comparisons2 = merge_sort_with_comparisons(arr2)
+print(f"\nInput: {arr2}")
+print(f"Sorted Output: {sorted_arr2}")
+print(f"Number of Comparisons: {comparisons2}")
