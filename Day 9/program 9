@@ -1,0 +1,22 @@
+def max_load(weights, max_capacity):
+    # Step 1: Sort the weights in descending order
+    sorted_weights = sorted(weights, reverse=True)
+    
+    current_weight = 0
+    
+    # Step 2: Try to load the items, starting from the heaviest
+    for weight in sorted_weights:
+        if current_weight + weight <= max_capacity:
+            current_weight += weight
+        else:
+            break  # Stop if adding the next item exceeds capacity
+    
+    return current_weight
+
+# Test Case 1
+weights = [10, 20, 30, 40, 50]
+max_capacity = 60
+
+# Run the greedy approach to find the maximum weight
+result = max_load(weights, max_capacity)
+print(result)  # Output: 50
