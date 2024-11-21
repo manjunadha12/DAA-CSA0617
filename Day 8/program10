@@ -1,0 +1,46 @@
+import heapq
+
+def dijkstra(n, graph, start):
+    # Initialize the distance array with infinity
+    distances = [float('inf')] * n
+    distances[start] = 0
+    pq = [(0, start)]  # (distance, node)
+    
+    while pq:
+        current_dist, node = heapq.heappop(pq)
+        
+        # If the current distance is already greater than the threshold, break early
+        if current_dist > distances[node]:
+            continue
+        
+        # Explore neighbors
+        for neighbor, weight in graph[node]:
+            new_dist = current_dist + weight
+            if new_dist < distances[neighbor]:
+                distances[neighbor] = new_dist
+                heapq.heappush(pq, (new_dist, neighbor))
+    
+    return distances
+
+def findCity(n, edges, distanceThreshold):
+    # Build the graph using adjacency list
+    graph = [[] for _ in range(n)]
+    for u, v, w in edges:
+        graph[u].append((v, w))
+        graph[v].append((u, w))
+    
+    # Initialize variables to track the city with the fewest reachable cities
+    best_city = -1
+    min_reachable = float('inf')
+    
+    # For each city, run Dijkstra's algorithm to find reachable cities within distanceThreshold
+    for city in range(n):
+        distances = dijkstra(n, graph, city)
+        reachable_count = sum(1 for d in distances if d <= distanceThreshold)
+        
+        # We want the city with the fewest reachable cities, and in case of ties, the largest index city
+        if reachable_count < min_reachable or (reachable_count == min_reachable and city > best_city):
+            min_reachable = reachable_count
+            best_city = city
+    
+    return best_city
