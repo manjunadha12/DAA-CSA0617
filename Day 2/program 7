@@ -1,0 +1,26 @@
+def champagneTower(poured: int, query_row: int, query_glass: int) -> float:
+    # Create a 2D list to represent the glasses
+    glasses = [[0] * (i + 1) for i in range(query_row + 1)]
+    
+    # Pour the champagne into the top glass
+    glasses[0][0] = poured
+    
+    # Iterate through each row
+    for i in range(query_row):
+        for j in range(i + 1):
+            # If the current glass overflows
+            if glasses[i][j] > 1:
+                # Calculate the excess champagne
+                excess = glasses[i][j] - 1
+                glasses[i][j] = 1  # Set current glass to full
+                
+                # Distribute the excess to the next row
+                glasses[i + 1][j] += excess / 2
+                glasses[i + 1][j + 1] += excess / 2
+    
+    # Return the amount of champagne in the queried glass
+    return min(1, glasses[query_row][query_glass])
+
+# Example usage
+result = champagneTower(1, 1, 1)
+print(f"{result:.5f}")
