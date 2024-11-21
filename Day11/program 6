@@ -1,0 +1,29 @@
+def subsetsWithElement(nums, x):
+    # First, remove x from the nums array
+    nums = [num for num in nums if num != x]
+    
+    # Helper function to generate subsets
+    def generate_subsets(nums):
+        subsets = [[]]  # Start with the empty subset
+        
+        # Iterate through the numbers and generate new subsets
+        for num in nums:
+            subsets += [subset + [num] for subset in subsets]
+        
+        return subsets
+    
+    # Generate subsets of the remaining elements
+    remaining_subsets = generate_subsets(nums)
+    
+    # Now, add x to each subset generated
+    result = [[x] + subset for subset in remaining_subsets]
+    
+    return result
+
+# Example input
+nums = [2, 3, 4, 5]
+x = 3
+
+# Output the subsets containing 3
+result = subsetsWithElement(nums, x)
+print(result)
