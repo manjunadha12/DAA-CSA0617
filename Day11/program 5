@@ -1,0 +1,28 @@
+def subsets(S):
+    # Step 1: Sort the input set to ensure lexicographical order
+    S.sort()
+    
+    # Step 2: Define the backtracking function to generate subsets
+    def backtrack(start, current_subset):
+        # Add the current subset to the result
+        result.append(current_subset[:])
+        
+        # Try to add more elements to the current subset
+        for i in range(start, len(S)):
+            # Skip duplicates by checking if the current element is the same as the previous one
+            if i > start and S[i] == S[i - 1]:
+                continue
+            current_subset.append(S[i])
+            backtrack(i + 1, current_subset)
+            current_subset.pop()  # Remove the last element to explore other options
+    
+    result = []
+    backtrack(0, [])
+    return result
+
+# Example input
+S = [1, 2, 3]
+
+# Output the subsets
+subsets_result = subsets(S)
+print(subsets_result)
