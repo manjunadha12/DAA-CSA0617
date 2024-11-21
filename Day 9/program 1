@@ -1,0 +1,13 @@
+def maxCoins(piles):
+    # Step 1: Sort the piles in descending order
+    piles.sort(reverse=True)
+    
+    # Step 2: Initialize a variable to store the coins you collect
+    max_coins = 0
+    
+    # Step 3: Pick the second largest pile in each group of three
+    # You pick the pile at index 1, 4, 7, etc. (i.e., every second pile starting from index 1)
+    for i in range(1, len(piles), 2):
+        max_coins += piles[i]
+    
+    return max_coins
