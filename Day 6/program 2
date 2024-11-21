@@ -1,0 +1,37 @@
+def median_of_medians(arr, k):
+    # Base case: if the array has 5 or fewer elements, just sort and return the k-th element
+    if len(arr) <= 5:
+        return sorted(arr)[k]
+    
+    # Step 1: Divide the array into sublists of at most 5 elements
+    sublists = [arr[i:i + 5] for i in range(0, len(arr), 5)]
+    
+    # Step 2: Find the median of each sublist
+    medians = []
+    for sublist in sublists:
+        medians.append(sorted(sublist)[len(sublist) // 2])
+    
+    # Step 3: Find the median of medians (pivot)
+    pivot = median_of_medians(medians, len(medians) // 2)
+    
+    # Step 4: Partition the array into elements less than, equal to, and greater than the pivot
+    low = [x for x in arr if x < pivot]
+    high = [x for x in arr if x > pivot]
+    pivot_list = [x for x in arr if x == pivot]
+    
+    # Step 5: Determine the position of k
+    if k < len(low):
+        return median_of_medians(low, k)
+    elif k < len(low) + len(pivot_list):
+        return pivot
+    else:
+        return median_of_medians(high, k - len(low) - len(pivot_list))
+
+# Test cases
+arr1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+k1 = 6
+arr2 = [23, 17, 31, 44, 55, 21, 20, 18, 19, 27]
+k2 = 5
+
+print(median_of_medians(arr1, k1 - 1))  # k is 6, index is 5, so we pass k-1
+print(median_of_medians(arr2, k2 - 1))  # k is 5, index is 4, so we pass k-1
