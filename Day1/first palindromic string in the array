@@ -1,0 +1,7 @@
+words = ["notapalindrome", "racecar"]
+palindrome = next((word for word in words if word == word[::-1]), None)
+print(palindrome)
+
+words = ["notapalindrome", "ada"]
+palindrome = next((word for word in words if word == word[::-1]), None)
+print(palindrome) 
