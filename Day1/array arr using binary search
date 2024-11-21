@@ -1,0 +1,19 @@
+
+def binary_search(arr, x):
+    left, right = 0, len(arr) - 1
+    while left <= right:
+        mid = left + (right - left) // 2
+        if arr[mid] == x:
+            return True
+        elif arr[mid] < x:
+            left = mid + 1
+        else:
+            right = mid - 1
+    return False
+
+# Test Case
+X = [3, 4, 6, -9, 10, 8, 9, 30]
+X.sort()  # Sorting the array for binary search
+KEY = 10
+result = binary_search(X, KEY)
+print(result)  # Output: True
