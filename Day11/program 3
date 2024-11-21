@@ -1,0 +1,39 @@
+def has_hamiltonian_cycle(edges, n):
+    # Step 1: Create an adjacency list
+    adj = {i: [] for i in range(n)}
+    for u, v in edges:
+        adj[u].append(v)
+        adj[v].append(u)
+    
+    # Step 2: Helper function to check if we can form a Hamiltonian cycle using backtracking
+    def backtrack(curr_vertex, visited, path):
+        # If the path contains all vertices and we can return to the starting vertex
+        if len(path) == n:
+            return path[0] in adj[curr_vertex]  # Check if the current vertex is adjacent to the starting vertex
+        
+        # Explore the neighbors of the current vertex
+        for neighbor in adj[curr_vertex]:
+            if not visited[neighbor]:
+                visited[neighbor] = True
+                path.append(neighbor)
+                if backtrack(neighbor, visited, path):
+                    return True
+                # Backtrack
+                visited[neighbor] = False
+                path.pop()
+        return False
+    
+    # Step 3: Try starting from each vertex
+    for start_vertex in range(n):
+        visited = [False] * n
+        visited[start_vertex] = True
+        if backtrack(start_vertex, visited, [start_vertex]):
+            return True
+    
+    return False
+
+# Example Test Case:
+edges = [(0, 1), (1, 2), (2, 3), (3, 0), (0, 2), (2, 4), (4, 0)]
+n = 5
+
+print(has_hamiltonian_cycle(edges, n))  # Output: True
