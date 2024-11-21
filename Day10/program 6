@@ -1,0 +1,44 @@
+def sumSubarrayMins(arr):
+    MOD = 10**9 + 7
+    n = len(arr)
+
+    # Calculate Previous Smaller Element (PSE) and Next Smaller Element (NSE) using stacks
+    pse = [-1] * n  # PSE[i] is the index of the previous element smaller than arr[i]
+    nse = [n] * n  # NSE[i] is the index of the next element smaller than arr[i]
+
+    # Calculate PSE for each element
+    stack = []
+    for i in range(n):
+        while stack and arr[stack[-1]] >= arr[i]:
+            stack.pop()
+        if stack:
+            pse[i] = stack[-1]
+        stack.append(i)
+
+    # Calculate NSE for each element
+    stack = []
+    for i in range(n-1, -1, -1):
+        while stack and arr[stack[-1]] > arr[i]:
+            stack.pop()
+        if stack:
+            nse[i] = stack[-1]
+        stack.append(i)
+
+    # Calculate the sum of minimums of all subarrays
+    result = 0
+    for i in range(n):
+        # Number of subarrays in which arr[i] is the minimum
+        left_count = i - pse[i]  # Subarrays that end at i
+        right_count = nse[i] - i  # Subarrays that start at i
+        result += arr[i] * left_count * right_count
+        result %= MOD  # Take modulo at each step to prevent overflow
+
+    return result
+
+# Example 1
+arr1 = [3, 1, 2, 4]
+print(sumSubarrayMins(arr1))  # Output: 17
+
+# Example 2
+arr2 = [11, 81, 94, 43, 3]
+print(sumSubarrayMins(arr2))  # Output: 444
