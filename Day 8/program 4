@@ -1,0 +1,48 @@
+def optimal_bst(keys, freq, n):
+    # Create a 2D table to store the cost of subtrees
+    dp = [[0 for _ in range(n)] for _ in range(n)]
+    root = [[0 for _ in range(n)] for _ in range(n)]
+    
+    # Initialize the diagonal elements (cost for a single key)
+    for i in range(n):
+        dp[i][i] = freq[i]
+        root[i][i] = i
+    
+    # Build the table for subtrees of size 2 to n
+    for length in range(2, n+1):  # length of the subtree
+        for i in range(n - length + 1):
+            j = i + length - 1
+            dp[i][j] = float('inf')
+            
+            # Try all possible roots for the subtree
+            for r in range(i, j+1):
+                cost = dp[i][r-1] + dp[r+1][j] if r != i and r != j else 0
+                total_cost = cost + sum(freq[i:j+1])
+                
+                if total_cost < dp[i][j]:
+                    dp[i][j] = total_cost
+                    root[i][j] = r
+    
+    # Return the final cost of the optimal binary search tree
+    return dp[0][n-1], root
+
+def print_tree(root, n):
+    for i in range(n):
+        for j in range(i, n):
+            print(f"root[{i}][{j}] = {root[i][j]}")
+            
+def main():
+    # Given inputs
+    keys = ['A', 'B', 'C', 'D']
+    freq = [0.1, 0.2, 0.4, 0.3]
+    n = len(keys)
+    
+    # Get the minimum cost and root table
+    cost, root = optimal_bst(keys, freq, n)
+    
+    print("Optimal BST cost:", cost)
+    print("\nRoot matrix:")
+    print_tree(root, n)
+
+# Execute the program
+main()
