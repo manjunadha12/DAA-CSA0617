@@ -1,0 +1,8 @@
+def strStr(haystack: str, needle: str) -> int:
+    return haystack.find(needle)
+
+# Example usage
+haystack = "sadbutsad"
+needle = "sad"
+output = strStr(haystack, needle)
+
