@@ -1,0 +1,20 @@
+class WordFilter:
+    def __init__(self, words):
+        self.prefix_suffix_map = {}
+        
+        # Iterate over each word in the dictionary
+        for index, word in enumerate(words):
+            # Generate all prefixes and suffixes for the current word
+            for i in range(len(word) + 1):  # prefix of length i
+                for j in range(len(word) + 1):  # suffix of length j
+                    prefix = word[:i]
+                    suffix = word[-j:] if j > 0 else ""
+                    self.prefix_suffix_map[(prefix, suffix)] = index
+    
+    def f(self, pref, suff):
+        # Return the index of the word that matches the prefix and suffix, or -1 if no such word exists
+        return self.prefix_suffix_map.get((pref, suff), -1)
+
+# Example usage
+wordFilter = WordFilter(["apple"])
+print(wordFilter.f("a", "e"))  # Output: 0
