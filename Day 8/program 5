@@ -1,0 +1,58 @@
+def optimal_bst(keys, freq, n):
+    # dp[i][j] stores the minimum cost of the BST for keys[i..j]
+    dp = [[0 for _ in range(n)] for _ in range(n)]
+    
+    # root[i][j] stores the index of the root of the optimal BST for keys[i..j]
+    root = [[0 for _ in range(n)] for _ in range(n)]
+    
+    # Base case: when there is only one key, the cost is just its frequency
+    for i in range(n):
+        dp[i][i] = freq[i]
+        root[i][i] = i
+    
+    # Fill the dp and root tables for subtrees of size 2 to n
+    for length in range(2, n+1):  # length is the number of keys in the subtree
+        for i in range(n - length + 1):
+            j = i + length - 1
+            dp[i][j] = float('inf')
+            
+            # Try every possible root in the range keys[i..j]
+            for r in range(i, j+1):
+                # Cost of the left and right subtrees
+                left_cost = dp[i][r-1] if r > i else 0
+                right_cost = dp[r+1][j] if r < j else 0
+                
+                # Calculate the total cost
+                total_cost = left_cost + right_cost + sum(freq[i:j+1])
+                
+                if total_cost < dp[i][j]:
+                    dp[i][j] = total_cost
+                    root[i][j] = r
+    
+    # Return the minimum cost and the root matrix
+    return dp[0][n-1], root
+
+def print_root_matrix(root, n):
+    # Print the root matrix which shows the roots of subtrees
+    print("Root Matrix:")
+    for i in range(n):
+        for j in range(i, n):
+            print(f"root[{i}][{j}] = {root[i][j]}")
+
+def main():
+    # Given inputs
+    keys = [10, 12, 16, 21]
+    freq = [4, 2, 6, 3]
+    n = len(keys)
+    
+    # Get the minimum cost and the root matrix
+    cost, root = optimal_bst(keys, freq, n)
+    
+    # Display the optimal BST cost
+    print(f"Optimal BST cost: {cost}")
+    
+    # Print the root matrix
+    print_root_matrix(root, n)
+
+# Execute the program
+main()
