@@ -1,0 +1,47 @@
+def orientation(p, q, r):
+    """Return the orientation of the triplet (p, q, r).
+    0 -> p, q and r are collinear
+    1 -> Clockwise
+    2 -> Counterclockwise
+    """
+    val = (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1])
+    if val == 0:
+        return 0
+    elif val > 0:
+        return 1
+    else:
+        return 2
+
+def is_point_on_hull(p, hull):
+    """Check if point p is on the convex hull defined by the list of points in hull."""
+    for i in range(len(hull)):
+        next_index = (i + 1) % len(hull)
+        if orientation(hull[i], hull[next_index], p) != 2:
+            return False
+    return True
+
+def convex_hull(points):
+    """Find the convex hull of a set of points using a brute force approach."""
+    if len(points) < 3:
+        return points
+
+    hull = []
+    
+    # Check all combinations of points to see if they are on the hull
+    for p in points:
+        if not is_point_on_hull(p, hull):
+            hull.append(p)
+
+    # Return only the points that form the convex hull
+    return hull
+
+# Input points
+points = [(1, 1), (4, 6), (8, 1), (0, 0), (3, 3)]
+
+# Get the convex hull
+hull = convex_hull(points)
+
+# Sort the hull in counter-clockwise order based on the polar angle
+hull.sort(key=lambda p: (p[0], p[1]))
+
+print("Convex Hull:", hull)
