@@ -1,0 +1,73 @@
+import heapq
+
+class Node:
+    def __init__(self, char, freq):
+        self.char = char
+        self.freq = freq
+        self.left = None
+        self.right = None
+    
+    # Comparison method for heapq to work with Node objects
+    def __lt__(self, other):
+        return self.freq < other.freq
+
+def build_huffman_tree(characters, frequencies):
+    # Step 1: Create a priority queue (min-heap) with initial nodes
+    heap = []
+    for char, freq in zip(characters, frequencies):
+        heapq.heappush(heap, Node(char, freq))
+    
+    # Step 2: Build the Huffman Tree
+    while len(heap) > 1:
+        # Extract the two nodes with the smallest frequencies
+        left = heapq.heappop(heap)
+        right = heapq.heappop(heap)
+        
+        # Create a new internal node with the combined frequency
+        internal_node = Node(None, left.freq + right.freq)
+        internal_node.left = left
+        internal_node.right = right
+        
+        # Insert the internal node back into the heap
+        heapq.heappush(heap, internal_node)
+    
+    # The remaining node is the root of the Huffman Tree
+    return heap[0]
+
+def generate_huffman_codes(root):
+    # Step 3: Traverse the tree to generate codes
+    codes = {}
+    
+    def dfs(node, current_code):
+        if node is None:
+            return
+        
+        # If it's a leaf node, assign the code to the character
+        if node.char is not None:
+            codes[node.char] = current_code
+        
+        # Traverse the left and right child nodes
+        dfs(node.left, current_code + "0")
+        dfs(node.right, current_code + "1")
+    
+    # Start the DFS from the root of the tree
+    dfs(root, "")
+    return codes
+
+def huffman_encoding(characters, frequencies):
+    # Build the Huffman Tree
+    root = build_huffman_tree(characters, frequencies)
+    
+    # Generate Huffman Codes from the tree
+    huffman_codes = generate_huffman_codes(root)
+    
+    # Step 4: Return the result as a list of tuples (character, code)
+    return [(char, huffman_codes[char]) for char in characters]
+
+# Test Case 1
+characters = ['a', 'b', 'c', 'd']
+frequencies = [5, 9, 12, 13]
+
+# Run the Huffman encoding function
+result = huffman_encoding(characters, frequencies)
+print(result)  # Output: [('a', '110'), ('b', '10'), ('c', '0'), ('d', '111')]
