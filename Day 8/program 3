@@ -1,0 +1,46 @@
+def floyd_algorithm(n, dist):
+    # Floyd-Warshall Algorithm to find shortest paths between all pairs of nodes
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                if dist[i][j] > dist[i][k] + dist[k][j]:
+                    dist[i][j] = dist[i][k] + dist[k][j]
+
+def display_matrix(dist):
+    # Display the distance matrix
+    for row in dist:
+        print(row)
+
+def count_reachable_cities(dist, city, threshold):
+    # Count how many cities are reachable from `city` with a distance <= threshold
+    return sum(1 for d in dist[city] if d <= threshold)
+
+def main():
+    n = 5
+    # Initialize the distance matrix with infinity where there is no direct edge
+    inf = float('inf')
+    dist = [
+        [0, 2, inf, inf, 8],
+        [2, 0, 3, inf, 2],
+        [inf, 3, 0, 1, inf],
+        [inf, inf, 1, 0, 1],
+        [8, 2, inf, 1, 0]
+    ]
+    
+    # Apply Floyd's Algorithm
+    floyd_algorithm(n, dist)
+    
+    # Display the distance matrix after applying Floyd's Algorithm
+    print("Distance Matrix after applying Floyd's Algorithm:")
+    display_matrix(dist)
+    
+    # Set the distance threshold
+    distance_threshold = 2
+    
+    # Count how many cities are reachable from city 0 (Router A) with the given threshold
+    reachable_count = count_reachable_cities(dist, 0, distance_threshold)
+    
+    print("\nNumber of cities reachable from city 0 within distance threshold:", reachable_count)
+
+# Run the program
+main()
