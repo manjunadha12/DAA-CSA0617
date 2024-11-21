@@ -1,0 +1,39 @@
+import bisect
+
+def maxProfit(startTime, endTime, profit):
+    # Combine the start, end times and profits into a list of jobs
+    jobs = list(zip(startTime, endTime, profit))
+    
+    # Sort jobs by their end time
+    jobs.sort(key=lambda x: x[1])
+    
+    # DP array to store the maximum profit up to each job
+    n = len(jobs)
+    dp = [0] * (n + 1)  # dp[i] will store the max profit up to job i
+    
+    # Extract the start and end times and profits separately
+    starts = [job[0] for job in jobs]
+    ends = [job[1] for job in jobs]
+    profits = [job[2] for job in jobs]
+    
+    # Function to find the last job that doesn't overlap with the current job
+    def findLastNonOverlapping(currIndex):
+        # Binary search for the largest index `j` where jobs[j].end <= jobs[currIndex].start
+        # jobs[currIndex] is the current job being considered.
+        return bisect.bisect_right(ends, starts[currIndex] - 1) - 1
+    
+    # Fill the dp array using dynamic programming
+    for i in range(1, n + 1):
+        # Option 1: Don't take the current job (dp[i-1])
+        # Option 2: Take the current job
+        # Find the last non-overlapping job
+        lastNonOverlappingJob = findLastNonOverlapping(i - 1)
+        dp[i] = max(dp[i - 1], profits[i - 1] + (dp[lastNonOverlappingJob + 1] if lastNonOverlappingJob != -1 else 0))
+    
+    return dp[n]
+
+# Example usage:
+startTime = [1, 2, 3, 3]
+endTime = [3, 4, 5, 6]
+profit = [50, 10, 40, 70]
+print(maxProfit(startTime, endTime, profit))  # Output: 120
