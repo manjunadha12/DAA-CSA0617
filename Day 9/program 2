@@ -1,0 +1,17 @@
+def minPatches(coins, target):
+    coins.sort()  # Step 1: Sort the coins
+    current_sum = 0  # This tracks the maximum sum we can create so far
+    added_coins = 0  # This counts how many new coins we add
+    
+    i = 0
+    while current_sum < target:
+        # If we can already form the next number (current_sum + 1) using the current coin, add it to the current_sum
+        if i < len(coins) and coins[i] <= current_sum + 1:
+            current_sum += coins[i]
+            i += 1
+        else:
+            # If we cannot form the next number, we need to add a new coin of value (current_sum + 1)
+            current_sum += current_sum + 1
+            added_coins += 1
+    
+    return added_coins
