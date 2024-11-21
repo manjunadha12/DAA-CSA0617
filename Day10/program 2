@@ -1,0 +1,36 @@
+def is_safe_with_obstacles(board, row, col, M, N, obstacles):
+    """Check if it's safe to place a queen at (row, col) with obstacles."""
+    if (row, col) in obstacles:  # Check if the position is blocked
+        return False
+    return is_safe(board, row, col, M, N)
+
+def n_queens_with_obstacles(M, N, obstacles):
+    """Solves the N-Queens problem on M×N board with obstacles."""
+    board = [-1] * M
+    solutions = []
+    solve_n_queens(board, 0, M, N, solutions, obstacles)
+    return solutions
+
+def solve_n_queens_with_obstacles(board, row, M, N, solutions, obstacles):
+    """Backtracking for M×N board with obstacles."""
+    if row == M:
+        solutions.append(board[:])  # Store a valid solution
+        return
+    
+    for col in range(N):
+        if is_safe_with_obstacles(board, row, col, M, N, obstacles):
+            board[row] = col
+            solve_n_queens_with_obstacles(board, row + 1, M, N, solutions, obstacles)
+            board[row] = -1  # Backtrack
+
+# Example: 5 Queens on a 5x5 Board with obstacles at (1, 2) and (3, 4)
+M = 5  # Number of queens
+N = 5  # Number of columns
+obstacles = [(1, 2), (3, 4)]  # Obstacles on positions (1, 2) and (3, 4)
+
+solutions = n_queens_with_obstacles(M, N, obstacles)
+
+if solutions:
+    print("Possible solution with obstacles:", solutions[0])
+else:
+    print("No solution found with obstacles.")
