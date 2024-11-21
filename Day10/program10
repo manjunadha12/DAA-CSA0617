@@ -1,0 +1,28 @@
+def permuteUnique(nums):
+    result = []
+    nums.sort()  # Sort to handle duplicates easily
+    
+    def backtrack(path, used):
+        # If the current path contains all elements, add it to the result
+        if len(path) == len(nums):
+            result.append(path[:])
+            return
+        
+        for i in range(len(nums)):
+            # Skip the element if it's already used or if it's a duplicate element
+            # and it hasn't been used in the current level of recursion
+            if used[i] or (i > 0 and nums[i] == nums[i-1] and not used[i-1]):
+                continue
+            used[i] = True
+            path.append(nums[i])
+            backtrack(path, used)
+            path.pop()
+            used[i] = False
+    
+    used = [False] * len(nums)
+    backtrack([], used)
+    return result
+
+# Example 1:
+nums = [1, 1, 2]
+print(permuteUnique(nums))  # Output: [[1, 1, 2], [1, 2, 1], [2, 1, 1]]
