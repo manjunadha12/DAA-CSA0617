@@ -1,0 +1,12 @@
+def process_numbers(numbers):
+    if not numbers:
+        return "The list is empty."
+    
+    sorted_numbers = sorted(numbers)
+    return sorted_numbers[-1]
+
+# Test Cases
+print(process_numbers([]))            # Expected Output: The list is empty.
+print(process_numbers([5]))           # Expected Output: 5
+print(process_numbers([3, 3, 3, 3, 3]))  # Expected Output: 3
+
