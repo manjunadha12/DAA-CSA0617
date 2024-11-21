@@ -1,0 +1,76 @@
+import time
+
+def print_board(board):
+    """Prints the board in a human-readable format"""
+    for row in board:
+        print(' '.join(row))
+    print()
+
+def is_safe(board, row, col, N):
+    """Check if it's safe to place a queen at board[row][col]"""
+    # Check the column
+    for i in range(row):
+        if board[i][col] == 'Q':
+            return False
+    
+    # Check upper left diagonal
+    for i, j in zip(range(row-1, -1, -1), range(col-1, -1, -1)):
+        if board[i][j] == 'Q':
+            return False
+    
+    # Check upper right diagonal
+    for i, j in zip(range(row-1, -1, -1), range(col+1, N)):
+        if board[i][j] == 'Q':
+            return False
+    
+    return True
+
+def solve_n_queens(board, row, N, solutions):
+    """Uses backtracking to find all solutions to the N-Queens problem"""
+    # Base case: If all queens are placed
+    if row == N:
+        solutions.append([''.join(row) for row in board])
+        return
+    
+    # Try placing a queen in all columns of the current row
+    for col in range(N):
+        if is_safe(board, row, col, N):
+            # Place the queen
+            board[row][col] = 'Q'
+            
+            # Recur to place the rest of the queens
+            solve_n_queens(board, row + 1, N, solutions)
+            
+            # Backtrack (remove the queen)
+            board[row][col] = '.'
+
+def n_queens(N):
+    """Solves the N-Queens problem and returns all solutions"""
+    board = [['.' for _ in range(N)] for _ in range(N)]
+    solutions = []
+    solve_n_queens(board, 0, N, solutions)
+    return solutions
+
+# Visualization function for different values of N
+def visualize_n_queens(N):
+    print(f"Solving {N}-Queens Problem...\n")
+    start_time = time.time()
+    
+    solutions = n_queens(N)
+    
+    print(f"Total solutions for {N}-Queens: {len(solutions)}\n")
+    
+    # Print the first 3 solutions (if there are that many) for visualization
+    for i, solution in enumerate(solutions[:3]):
+        print(f"Solution {i+1}:")
+        print_board(solution)
+    
+    end_time = time.time()
+    print(f"Time taken: {end_time - start_time:.4f} seconds\n")
+    
+    return solutions
+
+# Example Visualizations for N = 4, N = 5, and N = 8
+visualize_n_queens(4)  # For N = 4
+visualize_n_queens(5)  # For N = 5
+visualize_n_queens(8)  # For N = 8
