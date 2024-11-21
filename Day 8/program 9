@@ -1,0 +1,13 @@
+from collections import Counter
+
+def numIdenticalPairs(nums):
+    # Count occurrences of each number
+    count = Counter(nums)
+    
+    # Calculate the number of good pairs
+    good_pairs = 0
+    for value in count.values():
+        if value > 1:
+            good_pairs += value * (value - 1) // 2  # Combination C(k, 2)
+    
+    return good_pairs
