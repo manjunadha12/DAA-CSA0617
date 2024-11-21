@@ -1,0 +1,45 @@
+import heapq
+
+def dijkstra(n, graph, source):
+    # Initialize distances and visited set
+    distances = [float('inf')] * n
+    distances[source] = 0
+    visited = [False] * n
+
+    # Priority queue to store (distance, vertex) tuples
+    pq = [(0, source)]  # (distance, vertex)
+
+    while pq:
+        # Extract the vertex with the smallest distance
+        current_distance, u = heapq.heappop(pq)
+
+        # If this vertex is already visited, skip it
+        if visited[u]:
+            continue
+
+        visited[u] = True
+
+        # Update distances for all adjacent vertices
+        for v in range(n):
+            if graph[u][v] != float('inf') and not visited[v]:
+                new_distance = current_distance + graph[u][v]
+                if new_distance < distances[v]:
+                    distances[v] = new_distance
+                    heapq.heappush(pq, (distances[v], v))
+
+    return distances
+
+# Test Case 1
+n = 5
+graph = [
+    [0, 10, 3, float('inf'), float('inf')],
+    [float('inf'), 0, 1, 2, float('inf')],
+    [float('inf'), 4, 0, 8, 2],
+    [float('inf'), float('inf'), float('inf'), 0, 7],
+    [float('inf'), float('inf'), float('inf'), 9, 0]
+]
+source = 0
+
+# Run Dijkstra's algorithm
+result = dijkstra(n, graph, source)
+print(result)  # Output: [0, 7, 3, 9, 5]
