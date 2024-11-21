@@ -1,0 +1,46 @@
+def assembly_line_scheduling(n, a1, a2, t1, t2, e1, e2, x1, x2):
+    # Initialize the DP arrays for the first station
+    dp1 = [0] * (n + 1)
+    dp2 = [0] * (n + 1)
+    
+    # Entry times for the first station
+    dp1[0] = e1 + a1[0]
+    dp2[0] = e2 + a2[0]
+    
+    # Fill the DP table for each station
+    for i in range(1, n):
+        dp1[i] = min(dp1[i-1] + a1[i], dp2[i-1] + t2[i-1] + a1[i])
+        dp2[i] = min(dp2[i-1] + a2[i], dp1[i-1] + t1[i-1] + a2[i])
+    
+    # Calculate the final result considering exit times
+    result = min(dp1[n-1] + x1, dp2[n-1] + x2)
+    
+    return result
+
+# Test case 1
+n1 = 4
+a1_1 = [7, 9, 3, 4]
+a2_1 = [8, 5, 6, 4]
+t1_1 = [2, 3, 1]
+t2_1 = [2, 1, 2]
+e1_1 = 2
+e2_1 = 3
+x1_1 = 2
+x2_1 = 3
+
+result_1 = assembly_line_scheduling(n1, a1_1, a2_1, t1_1, t2_1, e1_1, e2_1, x1_1, x2_1)
+print(f"Test Case 1: Minimum time required = {result_1}")
+
+# Test case 2
+n2 = 3
+a1_2 = [4, 7, 6]
+a2_2 = [3, 5, 8]
+t1_2 = [2, 1]
+t2_2 = [1, 3]
+e1_2 = 3
+e2_2 = 4
+x1_2 = 2
+x2_2 = 3
+
+result_2 = assembly_line_scheduling(n2, a1_2, a2_2, t1_2, t2_2, e1_2, e2_2, x1_2, x2_2)
+print(f"Test Case 2: Minimum time required = {result_2}")
