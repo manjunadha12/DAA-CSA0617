@@ -1,0 +1,7 @@
+def find_maximum(numbers):
+    return max(numbers)
+
+# Test case
+input_data = {1, 2, 3, 4, 5}
+output = find_maximum(input_data)
+print(output)  # Expected Output: 5 
