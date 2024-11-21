@@ -1,0 +1,21 @@
+def count_pairs(nums, k):
+    count = 0
+    n = len(nums)
+    num_indices = {}
+
+    for i in range(n):
+        if nums[i] in num_indices:
+            for j in num_indices[nums[i]]:
+                if (i * j) % k == 0:
+                    count += 1
+            num_indices[nums[i]].append(i)
+        else:
+            num_indices[nums[i]] = [i]
+
+    return count
+
+# Example usage
+nums = [3, 1, 2, 2, 2, 1, 3]
+k = 2
+output = count_pairs(nums, k)
+print(output)  # Output: 4
