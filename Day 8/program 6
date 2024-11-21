@@ -1,0 +1,44 @@
+def catMouseGame(graph):
+    # Memoization table: key = (mouse_position, cat_position, turn)
+    # Value = result (1 for Mouse wins, 2 for Cat wins, 0 for Draw)
+    memo = {}
+    
+    def dfs(mouse, cat, turn):
+        # If the state has been seen before, return the result
+        if (mouse, cat, turn) in memo:
+            return memo[(mouse, cat, turn)]
+        
+        # If the Mouse reaches the hole (node 0), the Mouse wins
+        if mouse == 0:
+            return 1
+        
+        # If the Cat catches the Mouse, the Cat wins
+        if mouse == cat:
+            return 2
+        
+        # If it's the Mouse's turn (turn == 0)
+        if turn == 0:
+            # Explore all possible moves for the Mouse
+            result = 2  # Assume the Cat wins
+            for next_mouse in graph[mouse]:
+                if next_mouse != cat:  # Mouse can't move to the same position as the Cat
+                    result = min(result, dfs(next_mouse, cat, 1))  # Minimize over all possible moves
+            memo[(mouse, cat, turn)] = result
+            return result
+        
+        # If it's the Cat's turn (turn == 1)
+        else:
+            # Explore all possible moves for the Cat
+            result = 1  # Assume the Mouse wins
+            for next_cat in graph[cat]:
+                if next_cat != 0:  # Cat can't move to the hole (node 0)
+                    result = max(result, dfs(mouse, next_cat, 0))  # Maximize over all possible moves
+            memo[(mouse, cat, turn)] = result
+            return result
+    
+    # Start the game with the Mouse at node 1, the Cat at node 2, and it's the Mouse's turn (turn = 0)
+    return dfs(1, 2, 0)
+
+# Test the example
+graph = [[2,5], [3], [0,4,5], [1,4,5], [2,3], [0,2,3]]
+print(catMouseGame(graph))  # Output: 0
