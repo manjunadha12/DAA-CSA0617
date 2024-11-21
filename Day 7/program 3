@@ -1,0 +1,45 @@
+def assembly_line_scheduling_3_lines(station_times, transfer_times):
+    # Number of stations and lines
+    num_stations = len(station_times[0])
+    num_lines = len(station_times)
+    
+    # DP table initialization
+    dp = [[0 for _ in range(num_stations)] for _ in range(num_lines)]
+    
+    # Initialize for the first station (entry times)
+    for i in range(num_lines):
+        dp[i][0] = station_times[i][0]
+    
+    # Fill the DP table
+    for j in range(1, num_stations):
+        for i in range(num_lines):
+            # Stay on the same line
+            dp[i][j] = dp[i][j-1] + station_times[i][j]
+            
+            # Switch lines, considering the transfer time
+            for k in range(num_lines):
+                if k != i:  # Don't transfer to the same line
+                    dp[i][j] = min(dp[i][j], dp[k][j-1] + transfer_times[k][i] + station_times[i][j])
+    
+    # Calculate the minimum time at the last station
+    min_time = min(dp[i][num_stations-1] for i in range(num_lines))
+    
+    return min_time
+
+
+# Given inputs
+station_times = [
+    [5, 9, 3],  # Line 1
+    [6, 8, 4],  # Line 2
+    [7, 6, 5]   # Line 3
+]
+
+transfer_times = [
+    [0, 2, 3],  # Transfer times from Line 1 to Line 2, Line 1 to Line 3
+    [2, 0, 4],  # Transfer times from Line 2 to Line 1, Line 2 to Line 3
+    [3, 4, 0]   # Transfer times from Line 3 to Line 1, Line 3 to Line 2
+]
+
+# Compute the minimum time to process the product
+result = assembly_line_scheduling_3_lines(station_times, transfer_times)
+print(f"Minimum time to process the product: {result}")
