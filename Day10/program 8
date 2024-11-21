@@ -1,0 +1,35 @@
+def combinationSum2(candidates, target):
+    result = []
+    
+    # Sort the candidates to handle duplicates easily
+    candidates.sort()
+    
+    def backtrack(start, target, current_combination):
+        # Base case: if the target is zero, we found a valid combination
+        if target == 0:
+            result.append(list(current_combination))
+            return
+        # If the target becomes negative, no point in continuing
+        elif target < 0:
+            return
+        
+        # Iterate through the candidates starting from 'start'
+        for i in range(start, len(candidates)):
+            # Skip duplicates
+            if i > start and candidates[i] == candidates[i - 1]:
+                continue
+            # Include the current candidate and recurse
+            current_combination.append(candidates[i])
+            backtrack(i + 1, target - candidates[i], current_combination)
+            # Backtrack by removing the last element
+            current_combination.pop()
+    
+    # Start the backtracking process
+    backtrack(0, target, [])
+    
+    return result
+
+# Example 1:
+candidates = [10, 1, 2, 7, 6, 1, 5]
+target = 8
+print(combinationSum2(candidates, target))  # Output: [[1, 1, 6], [1, 2, 5], [1, 7], [2, 6]]
