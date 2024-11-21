@@ -1,0 +1,38 @@
+import heapq
+
+def networkDelayTime(times, n, k):
+    # Step 1: Build the graph (adjacency list)
+    graph = {i: [] for i in range(1, n+1)}
+    for u, v, w in times:
+        graph[u].append((v, w))  # u -> v with time w
+    
+    # Step 2: Dijkstra's algorithm
+    # Priority queue for the Dijkstra algorithm, initialized with the start node k
+    pq = [(0, k)]  # (distance, node)
+    distances = {i: float('inf') for i in range(1, n+1)}  # Distance to each node
+    distances[k] = 0  # Distance to start node is 0
+    
+    while pq:
+        # Get the node with the smallest known distance
+        current_dist, node = heapq.heappop(pq)
+        
+        # If we've already found a shorter way to this node, skip processing
+        if current_dist > distances[node]:
+            continue
+        
+        # Update the distances to neighboring nodes
+        for neighbor, weight in graph[node]:
+            new_dist = current_dist + weight
+            if new_dist < distances[neighbor]:
+                distances[neighbor] = new_dist
+                heapq.heappush(pq, (new_dist, neighbor))
+    
+    # Step 3: Find the longest time it takes to reach any node
+    max_time = max(distances.values())
+    
+    # If any node is unreachable (distance is still inf), return -1
+    if max_time == float('inf'):
+        return -1
+    
+    # Otherwise, return the maximum time
+    return max_time
