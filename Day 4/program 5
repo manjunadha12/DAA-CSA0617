@@ -1,0 +1,30 @@
+import itertools
+import math
+
+def distance(city1, city2):
+    """Calculate the Euclidean distance between two cities."""
+    return math.sqrt((city1[0] - city2[0]) ** 2 + (city1[1] - city2[1]) ** 2)
+
+def tsp(cities):
+    """Solve the TSP using exhaustive search."""
+    start_city = cities[0]
+    other_cities = cities[1:]
+
+    min_distance = float('inf')
+    best_path = []
+
+    # Generate all permutations of the cities excluding the starting city
+    for perm in itertools.permutations(other_cities):
+        current_path = [start_city] + list(perm) + [start_city]
+        total_distance = 0
+        for i in range(len(current_path) - 1):
+            total_distance += distance(current_path[i], current_path[i + 1])
+        
+        if total_distance < min_distance:
+            min_distance = total_distance
+            best_path = current_path
+
+    return min_distance, best_path
+
+# T  print(f"Shortest Path: {best_route}\n")
+
