@@ -1,0 +1,19 @@
+# Quick Sort implementation with the first element as the pivot
+def quick_sort(arr):
+    # Base case: if the array has 1 or 0 elements, it is already sorted
+    if len(arr) <= 1:
+        return arr
+    
+    # Choose the first element as the pivot
+    pivot = arr[0]
+    less_than_pivot = [x for x in arr[1:] if x <= pivot]  # Elements less than or equal to pivot
+    greater_than_pivot = [x for x in arr[1:] if x > pivot]  # Elements greater than pivot
+    
+    # Recursively sort the left and right parts, then combine with the pivot
+    return quick_sort(less_than_pivot) + [pivot] + quick_sort(greater_than_pivot)
+
+# Test case
+arr = [10, 16, 8, 12, 15, 6, 3, 9, 5]
+sorted_arr = quick_sort(arr)
+print(f"Sorted Array: {sorted_arr}")
+
