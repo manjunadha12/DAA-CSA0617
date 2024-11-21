@@ -1,0 +1,32 @@
+def dice_throw(num_dice, num_sides, target):
+    # Create a 2D DP table with (num_dice + 1) rows and (target + 1) columns
+    dp = [[0 for _ in range(target + 1)] for _ in range(num_dice + 1)]
+    
+    # There is one way to get sum 0 with 0 dice
+    dp[0][0] = 1
+    
+    # Fill the DP table
+    for i in range(1, num_dice + 1):
+        for j in range(1, target + 1):
+            dp[i][j] = 0
+            # Sum up all the possibilities for this dice throw
+            for k in range(1, num_sides + 1):
+                if j - k >= 0:
+                    dp[i][j] += dp[i-1][j-k]
+    
+    # Return the number of ways to reach the target sum with num_dice dice
+    return dp[num_dice][target]
+
+# Test Case 1
+num_sides_1 = 6
+num_dice_1 = 2
+target_1 = 7
+result_1 = dice_throw(num_dice_1, num_sides_1, target_1)
+print(f"Test Case 1: Number of ways to reach sum {target_1}: {result_1}")
+
+# Test Case 2
+num_sides_2 = 4
+num_dice_2 = 3
+target_2 = 10
+result_2 = dice_throw(num_dice_2, num_sides_2, target_2)
+print(f"Test Case 2: Number of ways to reach sum {target_2}: {result_2}")
