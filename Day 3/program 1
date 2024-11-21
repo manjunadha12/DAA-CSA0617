@@ -1,0 +1,15 @@
+test_cases = [
+    [],          # Expected Output: []
+    [1],        # Expected Output: [1]
+    [2, 2, 2],  # Expected Output: [2, 2, 2]
+    [-1, -2, -3] # Expected Output: [-1, -2, -3]
+]
+
+# Function to return the input list
+def process_list(input_list):
+    return input_list
+
+# Running test cases
+for case in test_cases:
+    output = process_list(case)
+    print(f"Input: {case} => Output: {output}")
