@@ -1,0 +1,33 @@
+def findTargetSumWays(nums, target):
+    total_sum = sum(nums)
+    
+    # If the target is out of possible bounds, return 0
+    if target > total_sum or target < -total_sum:
+        return 0
+    
+    # Calculate the positive sum
+    positive_sum = (total_sum + target) // 2
+    
+    # If positive_sum is not an integer, return 0
+    if (total_sum + target) % 2 != 0:
+        return 0
+    
+    # DP array to store the number of ways to achieve every sum up to positive_sum
+    dp = [0] * (positive_sum + 1)
+    dp[0] = 1  # There's one way to make sum 0, by not picking any numbers
+    
+    for num in nums:
+        for i in range(positive_sum, num - 1, -1):  # Traverse backwards
+            dp[i] += dp[i - num]  # Add ways to make sum i by including current num
+    
+    return dp[positive_sum]
+
+# Example 1:
+nums = [1, 1, 1, 1, 1]
+target = 3
+print(findTargetSumWays(nums, target))  # Output: 5
+
+# Example 2:
+nums = [1]
+target = 1
+print(findTargetSumWays(nums, target))  # Output: 1
