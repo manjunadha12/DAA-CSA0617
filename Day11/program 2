@@ -1,0 +1,48 @@
+def graph_coloring_min_colors(n, edges):
+    # Step 1: Construct the adjacency list
+    adj_list = {i: [] for i in range(n)}
+    for u, v in edges:
+        adj_list[u].append(v)
+        adj_list[v].append(u)
+    
+    # Step 2: Initialize color array where -1 means uncolored
+    colors = [-1] * n
+    max_color = 0  # Track the maximum color used
+    
+    # Step 3: Greedy coloring algorithm
+    for node in range(n):
+        if colors[node] == -1:  # If the node is not colored yet
+            # Find all the colors used by adjacent nodes
+            neighbor_colors = set()
+            for neighbor in adj_list[node]:
+                if colors[neighbor] != -1:
+                    neighbor_colors.add(colors[neighbor])
+            
+            # Assign the smallest color that is not used by neighbors
+            color = 0
+            while color in neighbor_colors:
+                color += 1
+            
+            # Color the node
+            colors[node] = color
+            max_color = max(max_color, color)
+    
+    return max_color + 1  # The total number of colors used (coloring starts from 0)
+
+def maximize_colored_regions(n, edges, k):
+    # Step 1: Calculate the minimum number of colors needed to color the graph
+    min_colors = graph_coloring_min_colors(n, edges)
+    
+    # Step 2: Maximize the regions you can color
+    # Since you are the first to color, Alice is second, Bob is third, and so on.
+    regions_colored_by_you = (n + (k - 1)) // k  # Round-robin, you color every k-th region
+    return regions_colored_by_you, min_colors
+
+# Test Case 1
+edges = [(0, 1), (1, 2), (2, 3), (3, 0), (0, 2)]  # Graph with 4 vertices and 5 edges
+n = 4  # Number of vertices
+k = 3  # Number of people (You, Alice, and Bob)
+
+regions_colored_by_you, min_colors = maximize_colored_regions(n, edges, k)
+print(f"Maximum regions you can color: {regions_colored_by_you}")
+print(f"Minimum number of colors required: {min_colors}")
