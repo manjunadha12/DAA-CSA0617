@@ -1,0 +1,62 @@
+from itertools import combinations
+import bisect
+
+# Function to generate all subset sums of a given list
+def generate_subset_sums(arr):
+    subset_sums = []
+    n = len(arr)
+    for size in range(n + 1):  # for each possible subset size (0 to n)
+        for combo in combinations(arr, size):  # all combinations of that size
+            subset_sums.append(sum(combo))  # sum of the combination
+    return subset_sums
+
+# Function to find the subset sum closest to the target
+def meet_in_the_middle(arr, target):
+    # Split the array into two halves
+    n = len(arr)
+    left_half = arr[:n//2]
+    right_half = arr[n//2:]
+    
+    # Generate all possible subset sums for both halves
+    left_sums = generate_subset_sums(left_half)
+    right_sums = generate_subset_sums(right_half)
+    
+    # Sort the right half's subset sums for binary search
+    right_sums.sort()
+    
+    # Variable to store the closest sum found
+    closest_sum = None
+    closest_diff = float('inf')  # Initialize with a large value
+    
+    # For each sum in the left sums, find the closest possible sum in the right sums
+    for left_sum in left_sums:
+        # Binary search: we want the closest sum in right_sums to `target - left_sum`
+        remaining = target - left_sum
+        pos = bisect.bisect_left(right_sums, remaining)
+        
+        # Check the element at position `pos` if it's within bounds
+        if pos < len(right_sums):
+            right_sum = right_sums[pos]
+            total_sum = left_sum + right_sum
+            if abs(total_sum - target) < closest_diff:
+                closest_sum = total_sum
+                closest_diff = abs(total_sum - target)
+        
+        # Check the element just before `pos` as well
+        if pos > 0:
+            right_sum = right_sums[pos - 1]
+            total_sum = left_sum + right_sum
+            if abs(total_sum - target) < closest_diff:
+                closest_sum = total_sum
+                closest_diff = abs(total_sum - target)
+    
+    return closest_sum
+
+# Test cases
+arr1 = [45, 34, 4, 12, 5, 2]
+target1 = 42
+arr2 = [1, 3, 2, 7, 4, 6]
+target2 = 10
+
+print(f"Closest sum to {target1} in arr1: {meet_in_the_middle(arr1, target1)}")
+print(f"Closest sum to {target2} in arr2: {meet_in_the_middle(arr2, target2)}")
