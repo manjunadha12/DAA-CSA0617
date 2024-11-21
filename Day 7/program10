@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+
+// Helper function to check if a word exists in the dictionary
+bool wordExists(char *word, char **wordDict, int dictSize) {
+    for (int i = 0; i < dictSize; i++) {
+        if (strcmp(word, wordDict[i]) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Function to check if the string can be segmented into words from the dictionary
+bool wordBreak(char *s, char **wordDict, int dictSize) {
+    int n = strlen(s);
+
+    // DP array where dp[i] means s[0...i-1] can be segmented
+    bool dp[n + 1];
+    memset(dp, 0, sizeof(dp));  // Initialize all elements to false
+    dp[0] = true;  // Empty string can always be segmented
+
+    // Loop through the string
+    for (int i = 1; i <= n; i++) {
+        // Check all possible substrings ending at position i
+        for (int j = 0; j < i; j++) {
+            // If dp[j] is true and substring s[j...i-1] is a valid word in the dictionary
+            if (dp[j] && wordExists(s + j, wordDict, dictSize)) {
+                dp[i] = true;
+                break;  // No need to check further substrings
+            }
+        }
+    }
+
+    return dp[n];  // Return if the entire string can be segmented
+}
+
+int main() {
+    // Dictionary of words
+    char *wordDict[] = {"i", "like", "sam", "sung", "samsung", "mobile", "ice", "cream", "icecream", "man", "go", "mango"};
+    int dictSize = 12;  // Size of dictionary
+
+    // Test case 1: "ilike"
+    char s1[] = "ilike";
+    if (wordBreak(s1, wordDict, dictSize)) {
+        printf("Yes\n");  // Expected Output: Yes
+    } else {
+        printf("No\n");
+    }
+
+    // Test case 2: "ilikesamsung"
+    char s2[] = "ilikesamsung";
+    if (wordBreak(s2, wordDict, dictSize)) {
+        printf("Yes\n");  // Expected Output: Yes
+    } else {
+        printf("No\n");
+    }
+
+    return 0;
+}
