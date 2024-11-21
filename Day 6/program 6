@@ -1,0 +1,27 @@
+def karatsuba(x, y):
+    # Base case for recursion: when the numbers are small enough (less than 10)
+    if x < 10 or y < 10:
+        return x * y
+    
+    # Find the size of the numbers
+    m = min(len(str(x)), len(str(y)))
+    m2 = m // 2
+    
+    # Split the numbers into two halves
+    high1, low1 = divmod(x, 10**m2)
+    high2, low2 = divmod(y, 10**m2)
+    
+    # Recursively compute three products
+    P1 = karatsuba(high1, high2)         # a * c
+    P2 = karatsuba(low1, low2)           # b * d
+    P3 = karatsuba(high1 + low1, high2 + low2)  # (a + b) * (c + d)
+    
+    # Combine the results using Karatsuba's formula
+    result = P1 * 10**(2 * m2) + (P3 - P1 - P2) * 10**m2 + P2
+    return result
+
+# Test case 1
+x = 1234
+y = 5678
+result = karatsuba(x, y)
+print(f"Test Case 1: {x} x {y} = {result}")
