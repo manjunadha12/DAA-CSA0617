@@ -1,0 +1,30 @@
+def min_containers(weights, max_capacity):
+    # Step 1: Sort the weights in descending order (greedy approach)
+    sorted_weights = sorted(weights, reverse=True)
+    
+    container_count = 0
+    current_capacity = 0
+    
+    # Step 2: Try to load items into containers
+    for weight in sorted_weights:
+        if current_capacity + weight <= max_capacity:
+            # If the item fits in the current container, add it
+            current_capacity += weight
+        else:
+            # If the item does not fit, start a new container
+            container_count += 1
+            current_capacity = weight  # The item starts the new container
+    
+    # After the loop, if there is any remaining weight in the last container, count it
+    if current_capacity > 0:
+        container_count += 1
+    
+    return container_count
+
+# Test Case 1
+weights = [5, 10, 15, 20, 25, 30, 35]
+max_capacity = 50
+
+# Run the greedy approach to find the minimum number of containers
+result = min_containers(weights, max_capacity)
+print(result)  # Output: 4
