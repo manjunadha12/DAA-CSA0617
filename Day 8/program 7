@@ -1,0 +1,42 @@
+import heapq
+
+def maxProbability(n, edges, succProb, start, end):
+    # Build the graph as an adjacency list
+    graph = {i: [] for i in range(n)}
+    for i, (a, b) in enumerate(edges):
+        graph[a].append((b, succProb[i]))
+        graph[b].append((a, succProb[i]))
+    
+    # Max heap, we negate the probabilities to simulate max heap using heapq (which is a min-heap)
+    heap = [(-1.0, start)]  # (probability, node)
+    
+    # Initialize distances with 0 probability for all nodes
+    max_prob = [0.0] * n
+    max_prob[start] = 1.0
+    
+    while heap:
+        prob, node = heapq.heappop(heap)
+        prob = -prob  # Revert back to positive probability
+        
+        # If we reach the end node, return the probability
+        if node == end:
+            return prob
+        
+        # Explore neighbors
+        for neighbor, succ in graph[node]:
+            new_prob = prob * succ
+            if new_prob > max_prob[neighbor]:
+                max_prob[neighbor] = new_prob
+                heapq.heappush(heap, (-new_prob, neighbor))  # Negate to maintain max-heap
+    
+    # If no path is found, return 0
+    return 0.0
+
+# Test example
+n = 3
+edges = [[0, 1], [1, 2], [0, 2]]
+succProb = [0.5, 0.5, 0.2]
+start = 0
+end = 2
+
+print(f"Maximum Probability: {maxProbability(n, edges, succProb, start, end):.5f}")
